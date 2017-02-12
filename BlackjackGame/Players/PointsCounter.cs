@@ -18,7 +18,7 @@ namespace BlackjackGame
             {
                 result += cardsPoints[card.Dignity];
             }
-            if (result > 21)
+            if (result > Rules.MaxPoints)
             {
                 cardsPoints[Dignity.Ace] = 1;
                 result = 0;

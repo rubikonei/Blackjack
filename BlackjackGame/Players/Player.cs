@@ -5,22 +5,23 @@ namespace BlackjackGame
 {
     public class Player
     {
+        public List<Card> Cards { get; set; }
+        public int Points { get; set; }
         public bool IsEnough { get; set; }
-        protected List<Card> cards;
-        protected PointsCounter counter;
-        public int Points { get; protected set; }
+        public int RoundsWon { get; set; }
+        public PointsCounter Counter { get; set; }
         public Player()
         {
-            cards = new List<Card>();
-            counter = new PointsCounter(cards);
+            Cards = new List<Card>();
+            Counter = new PointsCounter(Cards);
         }
         public virtual void TakeCard(Card card)
         {
             if (!IsEnough)
             {
-                cards.Add(card);
-                Points = counter.CountPoints();
-                if (Points >= 21)
+                Cards.Add(card);
+                Points = Counter.CountPoints();
+                if (Points >= Rules.MaxPoints)
                 {
                     IsEnough = true;
                 }
@@ -29,7 +30,7 @@ namespace BlackjackGame
         public override string ToString()
         {
             string result = "";
-            foreach (Card card in cards)
+            foreach (Card card in Cards)
             {
                 result += String.Format("{0} {1}; ", card.Suit.ToString(), card.Dignity.ToString());
             }

@@ -1,4 +1,6 @@
-﻿namespace BlackjackGame
+﻿using System;
+
+namespace BlackjackGame
 {
     class Program
     {

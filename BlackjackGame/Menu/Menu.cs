@@ -4,67 +4,56 @@ namespace BlackjackGame
 {
     public class Menu
     {
-        Dealer dealer = new Dealer();
-        Player player = new Player();
+        private Game game = new Game();
         public void Show()
         {
-            player.TakeCard(dealer.GiveCard());
-            player.TakeCard(dealer.GiveCard());
-            dealer.TakeCard(dealer.GiveCard());
-            dealer.TakeCard(dealer.GiveCard());
-            while (!player.IsEnough || !dealer.IsEnough)
+            game.CardsDistribution();
+            while (!game.player.IsEnough || !game.dealer.IsEnough)
             {
                 Console.Clear();
                 Console.WriteLine("Answers: click 'Y' - YES, 'N' - NO");
-                Console.WriteLine("Player: {0}", player);
-                Console.WriteLine("Dealer: {0}", dealer);
-                Console.WriteLine("Would you like to take card?");
-                string answer = Console.ReadLine();
-                switch (answer.ToLower())
+                Console.WriteLine("Player: {0}", game.player);
+                Console.WriteLine("Dealer: {0}", game.dealer);
+                if (game.player.IsEnough == false)
                 {
-                    case "y":
-                        player.TakeCard(dealer.GiveCard());
-                        break;
-                    case "n":
-                        player.IsEnough = true;
-                        break;
-                    default:
-                        Console.WriteLine("Неизвестная комманда");
-                        break;
+                    Console.WriteLine("Would you like to take card?");
+                    string answerToTakeNextCard = Console.ReadLine();
+                    switch (answerToTakeNextCard.ToLower())
+                    {
+                        case "y":
+                            game.player.IsEnough = false;
+                            break;
+                        case "n":
+                            game.player.IsEnough = true;
+                            break;
+                        default:
+                            Console.WriteLine("Неизвестная комманда");
+                            break;
+                    }
                 }
-                dealer.TakeCard(dealer.GiveCard());
+                game.Circle();
             }
             Console.Clear();
-            Console.WriteLine("Player: {0}", player);
-            Console.WriteLine("Dealer: {0}", dealer);
-            Console.WriteLine(winnerDefinition(player, dealer));
-            Console.ReadKey();
-
-        }
-        private string winnerDefinition(Player player, Dealer dealer)
-        {
-            string result;
-            if (player.Points > 21 && dealer.Points <= 21)
+            Console.WriteLine("Answers: click 'Y' - YES, 'N' - NO");
+            Console.WriteLine("Player: {0}", game.player);
+            Console.WriteLine("Dealer: {0}", game.dealer);
+            Console.WriteLine("Rounds Won: Player: {0}, Dealer: {1}", game.player.RoundsWon, game.dealer.RoundsWon);
+            Console.WriteLine("Next Round?");
+            string answerToPlayNextRound = Console.ReadLine();
+            switch (answerToPlayNextRound.ToLower())
             {
-                result = "The Winnet is Dealer";
+                case "y":
+                    game.Reset();
+                    Show();
+                    break;
+                case "n":
+                    Console.Clear();
+                    Console.WriteLine("Rounds Won: Player: {0}, Dealer: {1}", game.player.RoundsWon, game.dealer.RoundsWon);
+                    break;
+                default:
+                    Console.WriteLine("Неизвестная комманда");
+                    break;
             }
-            else if (dealer.Points > 21 && player.Points <= 21)
-            {
-                result = "The Winner is Player";
-            }
-            else if (player.Points < dealer.Points && dealer.Points <= 21)
-            {
-                result = "The Winnet is Dealer";
-            }
-            else if (dealer.Points < player.Points && player.Points <= 21)
-            {
-                result = "The Winner is Player";
-            }
-            else
-            {
-                result = "No Winner";
-            }
-            return result;
         }
     }
 }
